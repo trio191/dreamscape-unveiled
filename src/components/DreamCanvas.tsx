@@ -38,7 +38,7 @@ function StarField() {
 export const DreamCanvas = () => {
   return (
     <div className="fixed inset-0 -z-10">
-      <Canvas camera={{ position: [0, 0, 1] }}>
+      <Canvas camera={{ position: [0, 0, 1] as [number, number, number] }}>
         <StarField />
       </Canvas>
     </div>
