@@ -1,4 +1,3 @@
-
 import { toast } from "sonner";
 
 export interface DreamAnalysis {
@@ -6,7 +5,17 @@ export interface DreamAnalysis {
   dreamType: DreamType;
   symbols: DreamSymbol[];
   emotions: string[];
+  religiousInterpretations: ReligiousInterpretation[];
 }
+
+export interface ReligiousInterpretation {
+  religion: Religion;
+  interpretation: string;
+  keySymbols: string[];
+  iconName: string;
+}
+
+export type Religion = "Islamic" | "Hindu" | "Christian";
 
 export interface DreamSymbol {
   symbol: string;
@@ -68,12 +77,16 @@ export const analyzeDream = async (dreamText: string): Promise<DreamAnalysis> =>
   
   // Extract emotions
   const emotions = extractEmotions(dreamText);
+  
+  // Generate religious interpretations
+  const religiousInterpretations = generateReligiousInterpretations(dreamText, symbols);
 
   return {
     interpretation,
     dreamType,
     symbols,
-    emotions
+    emotions,
+    religiousInterpretations
   };
 };
 
@@ -204,4 +217,93 @@ const extractEmotions = (dreamText: string): string[] => {
   }
   
   return emotions;
+};
+
+// New function to generate religious interpretations
+const generateReligiousInterpretations = (dreamText: string, symbols: DreamSymbol[]): ReligiousInterpretation[] => {
+  const lowerDream = dreamText.toLowerCase();
+  const interpretations: ReligiousInterpretation[] = [];
+  
+  // Islamic Interpretation (based on Ibn Sirin's approach)
+  let islamicInterpretation = "In Islamic dream interpretation tradition, ";
+  let islamicSymbols: string[] = [];
+  
+  if (lowerDream.includes("water")) {
+    islamicInterpretation += "water often symbolizes life and purity. Clear water may represent honest earnings or good faith.";
+    islamicSymbols.push("Water");
+  } else if (lowerDream.includes("snake")) {
+    islamicInterpretation += "snakes often represent enemies or deceitful people in your life that you should be cautious of.";
+    islamicSymbols.push("Snake");
+  } else if (lowerDream.includes("fly")) {
+    islamicInterpretation += "flying suggests freedom from worldly concerns and spiritual elevation.";
+    islamicSymbols.push("Flying");
+  } else {
+    islamicInterpretation += "this dream may reflect your inner spiritual state and relationship with Allah. Consider prayer and reflection for further insight.";
+    if (symbols.length > 0) {
+      islamicSymbols.push(symbols[0].symbol);
+    }
+  }
+  
+  // Hindu Interpretation (based on Vedic traditions)
+  let hinduInterpretation = "According to Hindu dream interpretation, ";
+  let hinduSymbols: string[] = [];
+  
+  if (lowerDream.includes("elephant")) {
+    hinduInterpretation += "elephants symbolize wisdom, strength, and the removal of obstacles, similar to Lord Ganesha's qualities.";
+    hinduSymbols.push("Elephant");
+  } else if (lowerDream.includes("river") || lowerDream.includes("water")) {
+    hinduInterpretation += "flowing water represents the continuous flow of life and karma, possibly indicating a spiritual cleansing.";
+    hinduSymbols.push("River");
+  } else if (lowerDream.includes("temple") || lowerDream.includes("pray")) {
+    hinduInterpretation += "seeing a temple suggests spiritual progress and divine blessings entering your life.";
+    hinduSymbols.push("Temple");
+  } else {
+    hinduInterpretation += "dreams are considered a state of consciousness where the soul temporarily leaves the body. Your dream may contain messages about your karma and spiritual journey.";
+    if (symbols.length > 0) {
+      hinduSymbols.push(symbols.length > 1 ? symbols[1].symbol : symbols[0].symbol);
+    }
+  }
+  
+  // Christian Interpretation
+  let christianInterpretation = "From a Christian perspective, ";
+  let christianSymbols: string[] = [];
+  
+  if (lowerDream.includes("light") || lowerDream.includes("sun")) {
+    christianInterpretation += "light represents divine truth and God's presence, possibly guiding you through a difficult period.";
+    christianSymbols.push("Light");
+  } else if (lowerDream.includes("fish") || lowerDream.includes("bread")) {
+    christianInterpretation += "fish or bread may symbolize Christ's provision and miraculous abundance in your life.";
+    christianSymbols.push("Fish/Bread");
+  } else if (lowerDream.includes("cross") || lowerDream.includes("church")) {
+    christianInterpretation += "seeing religious symbols suggests a calling to strengthen your faith or return to spiritual practices.";
+    christianSymbols.push("Cross");
+  } else {
+    christianInterpretation += "this dream may contain spiritual messages relating to your walk with God. Consider biblical symbolism and pray for discernment of its meaning.";
+    if (symbols.length > 0) {
+      christianSymbols.push(symbols.length > 2 ? symbols[2].symbol : symbols[0].symbol);
+    }
+  }
+  
+  interpretations.push({
+    religion: "Islamic",
+    interpretation: islamicInterpretation,
+    keySymbols: islamicSymbols,
+    iconName: "mosque",
+  });
+  
+  interpretations.push({
+    religion: "Hindu",
+    interpretation: hinduInterpretation,
+    keySymbols: hinduSymbols,
+    iconName: "lotus",
+  });
+  
+  interpretations.push({
+    religion: "Christian",
+    interpretation: christianInterpretation,
+    keySymbols: christianSymbols,
+    iconName: "cross",
+  });
+  
+  return interpretations;
 };
