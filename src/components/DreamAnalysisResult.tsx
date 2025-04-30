@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { Book, Cross, Lotus, Mosque, HelpCircle } from "lucide-react";
+import { Book, Cross, Bookmark, Church, HelpCircle } from "lucide-react";
 import { 
   Tooltip,
   TooltipContent,
@@ -36,9 +36,9 @@ export const DreamAnalysisResult = ({ analysis }: DreamAnalysisResultProps) => {
   const getReligionIcon = (iconName: string) => {
     switch (iconName) {
       case "mosque":
-        return <Mosque className="h-5 w-5" />;
+        return <Church className="h-5 w-5" />;
       case "lotus":
-        return <Lotus className="h-5 w-5" />;
+        return <Bookmark className="h-5 w-5" />;
       case "cross":
         return <Cross className="h-5 w-5" />;
       default:
